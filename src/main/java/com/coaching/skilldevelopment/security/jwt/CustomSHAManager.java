@@ -1,7 +1,9 @@
 package com.coaching.skilldevelopment.security.jwt;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomSHAManager extends BCryptPasswordEncoder {
 
     @Override

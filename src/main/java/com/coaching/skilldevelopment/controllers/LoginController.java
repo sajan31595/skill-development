@@ -3,18 +3,15 @@ package com.coaching.skilldevelopment.controllers;
 import com.coaching.skilldevelopment.dto.User;
 import com.coaching.skilldevelopment.payload.JwtResponse;
 import com.coaching.skilldevelopment.payload.LoginRequest;
+import com.coaching.skilldevelopment.security.jwt.BasicAuthenticationToken;
 import com.coaching.skilldevelopment.security.jwt.JwtAuthManager;
 import com.coaching.skilldevelopment.security.jwt.JwtUtils;
 import com.coaching.skilldevelopment.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -29,9 +26,6 @@ public class LoginController {
     private IUserService userService;
 
     @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
     JwtUtils jwtUtils;
 
     // handler method to handle home page request
@@ -41,9 +35,11 @@ public class LoginController {
     }
 
     // handler method to handle login request
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        User user = authenticationManager.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+        BasicAuthenticationToken authentication = (BasicAuthenticationToken) authenticationManager.authenticate(
+                new BasicAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        User user = (User) authentication.getDetails();
         String jwt = jwtUtils.generateJwtToken(user);
         return ResponseEntity.ok(new JwtResponse(jwt,
                 user.getId(),

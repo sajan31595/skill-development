@@ -3,11 +3,13 @@ package com.coaching.skilldevelopment.security.jwt;
 import com.coaching.skilldevelopment.dto.User;
 import com.coaching.skilldevelopment.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtAuthManager {
+public class JwtAuthManager implements AuthenticationManager {
 
     @Autowired
     private IUserService userService;
@@ -15,8 +17,16 @@ public class JwtAuthManager {
     @Autowired
     private JwtUtils jwtutils;
 
-    public User authenticate(String username, String password) throws AuthenticationException {
-        User user = userService.findByEmail(username);
-        return user;
+    @Autowired
+    private CustomSHAManager manager;
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        User user = userService.findByEmail(String.valueOf(authentication.getPrincipal()));
+        manager.matches(String.valueOf(authentication.getCredentials()), user.getPassword());
+        BasicAuthenticationToken basicAuthenticationToken = new BasicAuthenticationToken(user);
+        basicAuthenticationToken.setAuthenticated(true);
+        basicAuthenticationToken.setUser(user);
+        return basicAuthenticationToken;
     }
 }
