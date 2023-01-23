@@ -33,6 +33,17 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     }
 
     @Override
+    public User findByUsername(String name) {
+        User user;
+        try{
+            user = userDao.findUserByName(name);
+        } catch(Exception ex){
+            throw new UsernameNotFoundException("User not present");
+        }
+        return user;
+    }
+
+    @Override
     public User findByEmail(String email){
         User user;
         try{

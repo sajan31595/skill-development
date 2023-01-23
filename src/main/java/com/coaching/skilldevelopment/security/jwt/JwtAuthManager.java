@@ -22,7 +22,7 @@ public class JwtAuthManager implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        User user = userService.findByEmail(String.valueOf(authentication.getPrincipal()));
+        User user = userService.findByUsername(String.valueOf(authentication.getPrincipal()));
         manager.matches(String.valueOf(authentication.getCredentials()), user.getPassword());
         BasicAuthenticationToken basicAuthenticationToken = new BasicAuthenticationToken(user);
         basicAuthenticationToken.setAuthenticated(true);

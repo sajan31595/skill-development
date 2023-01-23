@@ -39,7 +39,7 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         BasicAuthenticationToken authentication = (BasicAuthenticationToken) authenticationManager.authenticate(
                 new BasicAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        User user = (User) authentication.getDetails();
+        User user = (User) authentication.getUser();
         String jwt = jwtUtils.generateJwtToken(user);
         return ResponseEntity.ok(new JwtResponse(jwt,
                 user.getId(),

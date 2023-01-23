@@ -10,5 +10,7 @@ public interface IUserService {
 
     User findByEmail(String email);
 
+    User findByUsername(String email);
+
     void saveUser(User user);
 }

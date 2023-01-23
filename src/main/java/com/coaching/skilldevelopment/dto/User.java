@@ -45,6 +45,10 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -52,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "sajan";
+        return this.password;
     }
 
     @Override

@@ -28,6 +28,10 @@ public class BasicAuthenticationToken extends AbstractAuthenticationToken {
         this.user = user;
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
     @Override
     public Object getCredentials() {
         return this.credential;
