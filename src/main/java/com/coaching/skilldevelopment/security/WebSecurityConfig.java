@@ -2,7 +2,7 @@ package com.coaching.skilldevelopment.security;
 
 import com.coaching.skilldevelopment.security.jwt.AuthEntryPointJwt;
 import com.coaching.skilldevelopment.security.jwt.AuthTokenFilter;
-import com.coaching.skilldevelopment.security.jwt.CustomSHAManager;
+import com.coaching.skilldevelopment.security.jwt.EncryptionManager;
 import com.coaching.skilldevelopment.security.jwt.JwtAuthenticationFilter;
 import com.coaching.skilldevelopment.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(authenticationJwtTokenFilter(), JwtAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/api/auth/signin").permitAll()
+                                .requestMatchers("/api/auth/register").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -84,7 +85,7 @@ public class WebSecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        return new CustomSHAManager();
+        return new EncryptionManager();
     }
 
     @Autowired

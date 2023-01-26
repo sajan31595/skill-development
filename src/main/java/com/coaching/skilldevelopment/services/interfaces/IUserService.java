@@ -1,4 +1,4 @@
-package com.coaching.skilldevelopment.services;
+package com.coaching.skilldevelopment.services.interfaces;
 
 import com.coaching.skilldevelopment.dto.User;
 
@@ -12,5 +12,7 @@ public interface IUserService {
 
     User findByUsername(String email);
 
-    void saveUser(User user);
+    User saveUser(User user);
+
+    boolean isUsernameExists(String name);
 }

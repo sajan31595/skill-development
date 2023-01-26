@@ -7,11 +7,17 @@ import java.util.Collection;
 
 public class User implements UserDetails {
 
+    public enum SEX {
+        MALE,
+        FEMALE
+    }
     private String id;
     private String name;
-    private String age;
+    private int age;
     private String email;
     private String password;
+    private SEX sex;
+    private String phoneNumber;
 
     public String getId() {
         return id;
@@ -21,19 +27,11 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -49,6 +47,26 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void setUsername(String username) {
+        this.name = username;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getSex() {
+        return sex.toString();
+    }
+
+    public void setSex(SEX sex) {
+        this.sex = sex;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -61,7 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.getName();
+        return this.name;
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.coaching.skilldevelopment.security.jwt;
 
 import com.coaching.skilldevelopment.dto.User;
-import com.coaching.skilldevelopment.services.IUserService;
+import com.coaching.skilldevelopment.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,15 +20,18 @@ public class JwtAuthManager implements AuthenticationManager {
     private JwtUtils jwtutils;
 
     @Autowired
-    private CustomSHAManager manager;
+    private EncryptionManager encryptionManager;
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication)
+            throws AuthenticationException {
         User user = userService.findByUsername(String.valueOf(authentication.getPrincipal()));
-        manager.matches(String.valueOf(authentication.getCredentials()), user.getPassword());
-        BasicAuthenticationToken basicAuthenticationToken = new BasicAuthenticationToken(user);
-        basicAuthenticationToken.setAuthenticated(true);
-        basicAuthenticationToken.setUser(user);
-        return basicAuthenticationToken;
+        if(encryptionManager.matches(String.valueOf(authentication.getCredentials()), user.getPassword())) {
+            BasicAuthenticationToken basicAuthenticationToken = new BasicAuthenticationToken(user);
+            basicAuthenticationToken.setAuthenticated(true);
+            basicAuthenticationToken.setUser(user);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return basicAuthenticationToken;
+        } else throw new BadCredentialsException("Invalid credential");
     }
 }

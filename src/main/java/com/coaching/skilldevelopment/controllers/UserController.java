@@ -1,7 +1,7 @@
 package com.coaching.skilldevelopment.controllers;
 
 import com.coaching.skilldevelopment.dto.User;
-import com.coaching.skilldevelopment.services.IUserService;
+import com.coaching.skilldevelopment.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,19 +13,18 @@ import java.util.List;
 
 @Controller
 @CrossOrigin(origins="*", maxAge = 3600)
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private IUserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public ResponseEntity<?> getUsers() {
         List<User> users = userService.getUsers();
         return ResponseEntity.ok(users);
     }
 
-    // handler method to handle user registration form submit request
     @PostMapping("/save")
     public String registration(@ModelAttribute("user") User userDto,
                                BindingResult result,

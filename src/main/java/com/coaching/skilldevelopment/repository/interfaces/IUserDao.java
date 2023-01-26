@@ -1,4 +1,4 @@
-package com.coaching.skilldevelopment.repository;
+package com.coaching.skilldevelopment.repository.interfaces;
 
 import com.coaching.skilldevelopment.dto.User;
 
@@ -8,5 +8,5 @@ public interface IUserDao {
 
     List<User> findAll();
     User findUserByName(String userName);
-    User create(final User user);
+    User createUser(final User user);
 }
