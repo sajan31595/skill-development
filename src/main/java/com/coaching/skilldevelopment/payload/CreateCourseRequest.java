@@ -1,8 +1,6 @@
-package com.coaching.skilldevelopment.dto;
+package com.coaching.skilldevelopment.payload;
 
-import java.util.Date;
-
-public class Course {
+public class CreateCourseRequest {
 
     private int id;
     private String name;
@@ -11,9 +9,9 @@ public class Course {
     private int author_id;
     private int created_by;
     private String group_link;
-    private Date start_date;
-    private Date created_on;
-    private Date modified_on;
+    private String start_date;
+    private String created_on;
+    private String modified_on;
     private String status;
 
     public int getId() {
@@ -72,27 +70,27 @@ public class Course {
         this.group_link = group_link;
     }
 
-    public Date getStart_date() {
+    public String getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(Date start_date) {
+    public void setStart_date(String start_date) {
         this.start_date = start_date;
     }
 
-    public Date getCreated_on() {
+    public String getCreated_on() {
         return created_on;
     }
 
-    public void setCreated_on(Date created_on) {
+    public void setCreated_on(String created_on) {
         this.created_on = created_on;
     }
 
-    public Date getModified_on() {
+    public String getModified_on() {
         return modified_on;
     }
 
-    public void setModified_on(Date modified_on) {
+    public void setModified_on(String modified_on) {
         this.modified_on = modified_on;
     }
 

@@ -7,4 +7,6 @@ import java.util.List;
 public interface ICourseDao {
 
     List<Course> findAll();
+
+    void createCourse(Course course);
 }

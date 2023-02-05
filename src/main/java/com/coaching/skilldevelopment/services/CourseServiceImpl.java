@@ -19,4 +19,9 @@ public class CourseServiceImpl implements ICourseService {
         List<Course> courses = courseDao.findAll();
         return courses;
     }
+
+    @Override
+    public void createCourse(Course course) {
+        courseDao.createCourse(course);
+    }
 }
