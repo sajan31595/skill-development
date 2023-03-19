@@ -2,17 +2,17 @@ package com.coaching.skilldevelopment.payload;
 
 import java.util.List;
 
-public class UserRoleRequest {
+public class CourseUsersRequest {
 
-    private int roleId;
+    private int courseId;
     private List<Integer> userIds;
 
-    public int getRoleId() {
-        return roleId;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public List<Integer> getUserIds() {

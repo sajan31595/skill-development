@@ -23,32 +23,51 @@ public class UserDaoImpl implements IUserDao
     @Override
     @Transactional(readOnly=true)
     public List<User> getUsers() {
-        return jdbcTemplate.query("select * from users",
-                new UserRowMapper());
+        List<User> users = null;
+        try{
+            users = jdbcTemplate.query("select * from users where status='AC'",
+                    new UserRowMapper());
+        }catch (Exception ignored){}
+        return users;
     }
 
     @Override
     @Transactional(readOnly=true)
     public User findUserById(int id) {
-        return jdbcTemplate.queryForObject(
-                "select * from users where id=?",
-                new Object[]{id}, new int[]{}, new UserRowMapper());
+        User user = null;
+        try{
+            user = jdbcTemplate.queryForObject(
+                    "select * from users where id=?",
+                    new Object[]{id}, new int[]{Types.INTEGER}, new UserRowMapper());
+        }catch (Exception ex){}
+        return user;
     }
 
     @Transactional(readOnly=true)
     public User findUserByName(String userName) {
-        return jdbcTemplate.queryForObject(
-                "select * from users where lower(name)=?",
-                new Object[]{userName.toLowerCase()}, new int[]{Types.VARCHAR}, new UserRowMapper());
+        User user = null;
+        try{
+            user = jdbcTemplate.queryForObject(
+                    "select * from users where lower(name)=?",
+                    new Object[]{userName.toLowerCase()}, new int[]{Types.VARCHAR}, new UserRowMapper());
+        }catch (Exception ex){}
+        return user;
     }
 
+    @Override
     @Transactional(readOnly=true)
     public User findUserByEmail(String email) {
-        return jdbcTemplate.queryForObject(
-                "select * from users where lower(email)=?",
-                new Object[]{email.toLowerCase()}, new int[]{Types.VARCHAR}, new UserRowMapper());
+        User user = null;
+        try{
+            user = jdbcTemplate.queryForObject(
+                    "select * from users where lower(email)=?",
+                    new Object[]{email.toLowerCase()}, new int[]{Types.VARCHAR}, new UserRowMapper());
+        } catch (Exception ex){}
+        return user;
     }
 
+    @Override
+    @Transactional
     public User createUser(final User user) {
         final String sql = "INSERT INTO USERS(ID, NAME, PASSWORD, AGE, EMAIL, PHONE, DOB, SEX, STATUS )" +
                 " VALUES (nextval('users_seq'), ?, ?, ?, ?, ?, CURRENT_DATE, ?, 'AC')";
@@ -75,6 +94,7 @@ public class UserDaoImpl implements IUserDao
     }
 
     @Override
+    @Transactional(readOnly=true)
     public List<String> getRoles(int userId) {
         final String sql = "select r.name from users u, roles r, user_roles ur \n" +
                 "where  u.id = ur.user_id and r.id = ur.role_id and u.id = ?";
@@ -89,26 +109,23 @@ public class UserDaoImpl implements IUserDao
     }
 
     @Override
-    public void addUserToRoles(int userId, List<Integer> roleIds) {
+    public void addUserToRoles(int userId, int roleId) {
         final String sql = "INSERT INTO USER_ROLES(ID, USER_ID, ROLE_ID, CREATED_ON, MODIFIED_ON, STATUS )" +
                 " VALUES (nextval('user_roles_seq'), ?, ?, CURRENT_DATE, CURRENT_DATE, 'AC')";
-        for (Integer roleId: roleIds) {
-            try {
-                KeyHolder holder = new GeneratedKeyHolder();
-                jdbcTemplate.update(new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                        ps.setInt(1, userId);
-                        ps.setInt(3, roleId);
-                        return ps;
-                    }
-                }, holder);
-            }
-            catch(Exception ex) {
-            }
+        try {
+            KeyHolder holder = new GeneratedKeyHolder();
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, userId);
+                    ps.setInt(2, roleId);
+                    return ps;
+                }
+            }, holder);
         }
-
+        catch(Exception ex) {
+        }
     }
 }
 

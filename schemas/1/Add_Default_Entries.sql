@@ -33,3 +33,16 @@ VALUES (nextval('roles_seq'), 'ADMIN', 'The administrator of the tenant.', CURRE
 
 insert into user_roles(id, user_id, role_id, created_on, modified_on, status)
 values (nextval('user_roles_seq'), 1, 3,CURRENT_DATE, CURRENT_DATE, 'AC' );
+
+-- Entries made on 19th March 2023
+CREATE SEQUENCE enrolments_seq
+INCREMENT 1
+START 1;
+
+CREATE SEQUENCE course_events_seq
+INCREMENT 1
+START 1;
+
+CREATE SEQUENCE todos_seq
+INCREMENT 1
+START 1;

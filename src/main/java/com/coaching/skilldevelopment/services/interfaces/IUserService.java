@@ -5,7 +5,6 @@ import com.coaching.skilldevelopment.dto.User;
 import com.coaching.skilldevelopment.exception.InvalidRequestException;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IUserService {
 
@@ -21,5 +20,5 @@ public interface IUserService {
 
     List<Role.RoleType> getRoles(int userId);
 
-    void addUserToRoles(Map<Integer, List<Integer>> userToRoles) throws InvalidRequestException;
+    void addUserToRoles(int roleId, List<Integer> userIds) throws InvalidRequestException;
 }

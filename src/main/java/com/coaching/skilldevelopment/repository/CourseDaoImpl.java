@@ -1,7 +1,9 @@
 package com.coaching.skilldevelopment.repository;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.Event;
 import com.coaching.skilldevelopment.dto.rowmapper.CourseRowMapper;
+import com.coaching.skilldevelopment.dto.rowmapper.EventRowMapper;
 import com.coaching.skilldevelopment.repository.interfaces.ICourseDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,10 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -33,8 +32,7 @@ public class CourseDaoImpl implements ICourseDao {
     @Override
     @Transactional
     public void createCourse(Course course) {
-        {
-            final String sql = "INSERT INTO COURSES(ID, NAME, DESCRIPTION, TYPE, AUTHOR_ID, CREATED_BY, GROUP_LINK, START_DATE, CREATED_ON, MODIFIED_ON, STATUS )" +
+        final String sql = "INSERT INTO COURSES(ID, NAME, DESCRIPTION, TYPE, AUTHOR_ID, CREATED_BY, GROUP_LINK, START_DATE, CREATED_ON, MODIFIED_ON, STATUS )" +
                     " VALUES (nextval('courses_seq'), ?, ?, ?, ?, ?, ?, ?, CURRENT_DATE, CURRENT_DATE, 'AC')";
             try {
                 KeyHolder holder = new GeneratedKeyHolder();
@@ -55,6 +53,95 @@ public class CourseDaoImpl implements ICourseDao {
             } catch (Exception ex) {
                 System.out.println("Error:"+ ex);
             }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Course> getCoursesForInstructor(String userId) {
+        int id = Integer.parseInt(userId);
+        final String sql = "select * from courses where author_id = ? or created_by =?";
+        List<Course> courses = null;
+        try {
+            courses = jdbcTemplate.query(sql, new Object[]{id, id},
+                    new int[]{Types.INTEGER, Types.INTEGER}, new CourseRowMapper());
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return courses;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isUserEnrolled(int userId, int courseId) {
+        long enrolmentId = 0;
+        String sql = "select id from enrolment where user_id=? and course_id=?";
+        try {
+            enrolmentId = jdbcTemplate.queryForObject(sql, new Object[]{userId, courseId},
+                    new int[]{Types.INTEGER, Types.INTEGER}, Long.class);
+            return enrolmentId>0;
+        }
+        catch(Exception ex) {
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void addUserToCourse(int courseId, int userId){
+        final String sql = "INSERT INTO ENROLMENTS(ID, USER_ID, COURSE_ID, CREATED_ON, STATUS )" +
+                " VALUES (nextval('enrolments_seq'), ?, ?, CURRENT_DATE, 'AC')";
+        try {
+            KeyHolder holder = new GeneratedKeyHolder();
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, userId);
+                    ps.setInt(2, courseId);
+                    return ps;
+                }
+            }, holder);
+        }
+        catch(Exception ex) {
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Event> getEvents(int courseId) {
+        List<Event> events = null;
+        String sql = "select * from course_events where course_id=" +courseId;
+        try {
+            events = jdbcTemplate.query(sql, new EventRowMapper());
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return events;
+    }
+
+    @Override
+    @Transactional
+    public void addEvent(Event event){
+        final String sql = "insert into course_events(ID, COURSE_ID, EVENT_TYPE, EVENT_NAME, EVENT_DESCRIPTION, EVENT_DATE, STATUS )" +
+                " VALUES (nextval('course_events_seq'), ?, ?, ?, ?, ?, 'AC')";
+        try {
+            KeyHolder holder = new GeneratedKeyHolder();
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, event.getCourseId());
+                    ps.setString(2, event.getEventType());
+                    ps.setString(3, event.getEventName());
+                    ps.setString(4, event.getEventDescription());
+                    ps.setDate(5, new java.sql.Date(event.getEventDate().getTime()));
+                    return ps;
+                }
+            }, holder);
+        } catch (Exception ex) {
+            System.out.println("Error:"+ ex);
         }
     }
 }

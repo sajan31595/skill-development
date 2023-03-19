@@ -1,6 +1,8 @@
 package com.coaching.skilldevelopment.helper;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.Event;
+import com.coaching.skilldevelopment.payload.CourseEventRequest;
 import com.coaching.skilldevelopment.payload.CreateCourseRequest;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +22,16 @@ public class CourseValidationHelper {
         try {course.setStart_date(new SimpleDateFormat("dd-mm-yyyy").parse(request.getStart_date()));}
         catch(ParseException pe){}
         return course;
+    }
+
+    public Event getEvent(CourseEventRequest request) {
+        Event event = new Event();
+        event.setEventName(request.getEventName());
+        event.setEventDescription(request.getEventDescription());
+        event.setEventType(request.getEventType());
+        event.setCourseId(request.getCourseId());
+        try {event.setEventDate(new SimpleDateFormat("dd-mm-yyyy").parse(request.getEventDate()));}
+        catch(ParseException pe){}
+        return event;
     }
 }

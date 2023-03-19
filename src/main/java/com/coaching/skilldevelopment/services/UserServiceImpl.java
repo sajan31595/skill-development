@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService, UserDetailsService {
@@ -92,25 +90,19 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     }
 
     @Override
-    public void addUserToRoles(Map<Integer, List<Integer>> userToRoles) throws InvalidRequestException {
-        for (Map.Entry<Integer, List<Integer>> userToRole : userToRoles.entrySet()) {
-            int userId = userToRole.getKey();
-            List<Integer> roleIds = userToRole.getValue();
-            //validate if the userId is valid.
+    public void addUserToRoles(int roleId, List<Integer> userIds) throws InvalidRequestException {
+        //validate if the roleIds are valid.
+        Role role = roleDao.getRole(roleId);
+        if(role == null) throw new InvalidRequestException("Invalid role");
+
+        for(int userId: userIds){
             User user = userDao.findUserById(userId);
-            if(user==null) throw new InvalidRequestException();
-
-            //validate if the roleIds are valid.
-            List<Role> roles = roleDao.getRoles();
-            List<Integer> roleIDsFromDB = roles.stream().map(Role::getRoleId).collect(Collectors.toList());
-            List<Integer> invalidRoleIds = null;
-            for (Integer roleId: roleIds) {
-                if(!roleIDsFromDB.contains(roleId)) invalidRoleIds.add(roleId);
+            if(user==null) throw new InvalidRequestException("Invalid some of users");
+            if(!roleDao.isUserExistInRole(roleId, userId)){
+                //Sending the request to Dao
+                userDao.addUserToRoles(userId, roleId);
             }
-            if(invalidRoleIds!=null) throw new InvalidRequestException();
-
-            //Sending the request to Dao
-            userDao.addUserToRoles(userId, roleIds);
         }
+
     }
 }
