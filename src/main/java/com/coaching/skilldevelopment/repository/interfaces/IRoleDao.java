@@ -7,4 +7,6 @@ import java.util.List;
 public interface IRoleDao {
 
     List<Role> getRoles();
+    Role getRole(int roleId);
+    boolean isUserExistInRole(int roleId, int userId);
 }

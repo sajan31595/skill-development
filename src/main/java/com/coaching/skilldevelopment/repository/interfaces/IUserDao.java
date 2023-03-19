@@ -9,7 +9,8 @@ public interface IUserDao {
     List<User> getUsers();
     User findUserById(int userId);
     User findUserByName(String userName);
+    User findUserByEmail(String email);
     User createUser(final User user);
     List<String> getRoles(int userId);
-    void addUserToRoles(int userId, List<Integer> roleIds);
+    void addUserToRoles(int userId, int roleId);
 }
