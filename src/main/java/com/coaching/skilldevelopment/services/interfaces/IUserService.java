@@ -10,6 +10,8 @@ public interface IUserService {
 
     List<User> getUsers();
 
+    User getUserById(int id);
+
     User findByEmail(String email);
 
     User findByUsername(String email);

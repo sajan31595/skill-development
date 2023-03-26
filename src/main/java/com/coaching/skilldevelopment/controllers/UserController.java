@@ -31,9 +31,15 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> getUsers() throws AuthenticationException {
-        access.canAccessUsers();
+        //access.canAccessUsers();
         List<User> users = userService.getUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable int userId) {
+        User user = userService.getUserById(userId);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/")

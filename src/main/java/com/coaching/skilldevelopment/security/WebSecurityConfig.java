@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -43,6 +44,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/api/auth/signin").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/users/").permitAll()
+                                .requestMatchers("/api/users/*").permitAll()
+                                .requestMatchers("/api/todo/").permitAll()
+                                .requestMatchers("/api/todo/*").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -51,10 +56,22 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    @Bean
+    /*@Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }*/
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
