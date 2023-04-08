@@ -18,6 +18,10 @@ public interface IUserService {
 
     User saveUser(User user);
 
+    void updateUser(int userId, User user);
+
+    void deleteUser(int userId);
+
     boolean isUsernameExists(String name);
 
     List<Role.RoleType> getRoles(int userId);

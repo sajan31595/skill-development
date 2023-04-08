@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class User implements UserDetails {
 
@@ -18,6 +20,8 @@ public class User implements UserDetails {
     private String password;
     private SEX sex;
     private String phoneNumber;
+    private List<Role.RoleType> roles;
+    private Date birthDate;
 
     public String getId() {
         return id;
@@ -65,6 +69,30 @@ public class User implements UserDetails {
 
     public void setSex(SEX sex) {
         this.sex = sex;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Role.RoleType> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role.RoleType> roles) {
+        this.roles = roles;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override

@@ -31,13 +31,14 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> getUsers() throws AuthenticationException {
-        //access.canAccessUsers();
+        access.canAccessUsers();
         List<User> users = userService.getUsers();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUser(@PathVariable int userId) {
+    public ResponseEntity<?> getUser(@PathVariable int userId) throws AuthenticationException {
+        access.canAccessUsers();
         User user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
@@ -55,6 +56,24 @@ public class UserController {
         User user = userValidator.getUser(request);
         user = userService.saveUser(user);
         return ResponseEntity.ok("User Created");
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable int userId, @RequestBody CreateUserRequest request)
+            throws AuthenticationException, InvalidRequestException {
+        access.canAccessUsers();
+        User user = userValidator.getUpdatedUser(request);
+        userService.updateUser(userId, user);
+        user = userService.getUserById(userId);
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable int userId)
+            throws AuthenticationException, InvalidRequestException {
+        access.canAccessUsers();
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("User Deleted");
     }
 
     @PostMapping("/addUsersToRole")

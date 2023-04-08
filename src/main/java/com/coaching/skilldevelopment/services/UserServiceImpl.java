@@ -89,6 +89,16 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     }
 
     @Override
+    public void updateUser(int userId, User user) {
+        userDao.updateUser(userId, user);
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        userDao.deleteUser(userId);
+    }
+
+    @Override
     public List<Role.RoleType> getRoles(int userId) {
         List<String> roles = userDao.getRoles(userId);
         List<Role.RoleType> updatedRoles = new ArrayList<Role.RoleType>();

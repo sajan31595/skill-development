@@ -6,6 +6,9 @@ import com.coaching.skilldevelopment.security.jwt.EncryptionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 @Component
 public class UserValidationHelper {
 
@@ -20,12 +23,26 @@ public class UserValidationHelper {
     }
 
     public User getUser(RegisterUserRequest request){
+        User user = getBasicUserDetails(request);
+        user.setPassword(passwordManager.encode(request.getPassword()));
+        return user;
+    }
+
+    public User getUpdatedUser(RegisterUserRequest request) {
+        User user = getBasicUserDetails(request);
+        return user;
+    }
+
+    private User getBasicUserDetails(RegisterUserRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setPassword(passwordManager.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setAge(request.getAge());
         user.setSex(User.SEX.valueOf(request.getSex()));
+        user.setPhoneNumber(request.getPhone());
+        try {user.setBirthDate(new SimpleDateFormat("yyyy-mm-dd").parse(request.getBirthDate()));}
+        catch(ParseException pe){}
         return user;
     }
+
 }

@@ -85,21 +85,6 @@ public class WebSecurityConfig {
         return (web) -> web.ignoring().requestMatchers("/js/**", "/images/**");
     }
 
-    /*@Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        return authProvider;
-    }*/
-
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new EncryptionManager();

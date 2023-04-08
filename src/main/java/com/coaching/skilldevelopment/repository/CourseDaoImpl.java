@@ -57,6 +57,47 @@ public class CourseDaoImpl implements ICourseDao {
 
     @Override
     @Transactional(readOnly = true)
+    public Course getCourse(int courseId) {
+        String sql = "select * from courses where ID = "+ courseId;
+        Course course = null;
+        try{
+            course = jdbcTemplate.queryForObject(sql,new CourseRowMapper());
+        }catch(Exception ex) {}
+        return course;
+    }
+
+    @Override
+    @Transactional
+    public void updateCourse(int courseId, Course course) {
+        String sql = "UPDATE COURSES SET " +
+                "NAME =?, DESCRIPTION =?, TYPE=?, AUTHOR_ID=?, CREATED_BY=?, GROUP_LINK =?, " +
+                "MODIFIED_ON =CURRENT_DATE, START_DATE =?, STATUS =? " +
+                "WHERE id=?";
+        try{
+            jdbcTemplate.update(sql,
+                    course.getName(),
+                    course.getDescription(),
+                    course.getType(),
+                    course.getAuthor_id(),
+                    course.getCreated_by(),
+                    course.getGroup_link(),
+                    course.getStart_date(),
+                    "AC",
+                    courseId);
+        } catch (Exception ex){
+        }
+    }
+
+    @Override
+    @Transactional()
+    public void deleteCourse(int courseId) {
+        try{
+            jdbcTemplate.update("DELETE FROM COURSES WHERE id=?", courseId);
+        }catch (Exception ex){ }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Course> getCoursesForInstructor(String userId) {
         int id = Integer.parseInt(userId);
         final String sql = "select * from courses where author_id = ? or created_by =?";
@@ -109,6 +150,18 @@ public class CourseDaoImpl implements ICourseDao {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Course> getEnrolledCourses(int userId) {
+        String sql = "select c.* from enrolments e " +
+                "left join courses c on c.id = e.course_id and user_id = "+ userId;
+        List<Course> courses = null;
+        try{
+            courses = jdbcTemplate.query(sql,new CourseRowMapper());
+        }catch(Exception ex) {}
+        return courses;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Event> getEvents(int courseId) {
         List<Event> events = null;
         String sql = "select * from course_events where course_id=" +courseId;
@@ -143,5 +196,58 @@ public class CourseDaoImpl implements ICourseDao {
         } catch (Exception ex) {
             System.out.println("Error:"+ ex);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Event> getEvents(){
+        List<Event> events = null;
+        String sql = "select * from course_events where status='AC'";
+        try {
+            events = jdbcTemplate.query(sql, new EventRowMapper());
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return events;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Event getEvent(int eventId){
+        Event event = null;
+        String sql = "select * from course_events where status='AC'";
+        try {
+            event = jdbcTemplate.queryForObject(sql, new EventRowMapper());
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return event;
+    }
+
+    @Override
+    @Transactional
+    public void updateEvent(int eventId, Event event){
+        String sql = "UPDATE course_events SET COURSE_ID =?, EVENT_TYPE =?, EVENT_NAME=?, EVENT_DESCRIPTION=?, EVENT_DATE=?, STATUS =? WHERE id=?";
+        try{
+            jdbcTemplate.update(sql,
+                    event.getCourseId(),
+                    event.getEventType(),
+                    event.getEventName(),
+                    event.getEventDescription(),
+                    event.getEventDate(),
+                    "AC",
+                    eventId);
+        } catch (Exception ex){
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteEvent(int eventId){
+        try{
+            jdbcTemplate.update("DELETE FROM course_events WHERE id=?", eventId);
+        }catch (Exception ex){ }
     }
 }

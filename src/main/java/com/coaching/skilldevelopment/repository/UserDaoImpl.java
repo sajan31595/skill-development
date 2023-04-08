@@ -70,7 +70,7 @@ public class UserDaoImpl implements IUserDao
     @Transactional
     public User createUser(final User user) {
         final String sql = "INSERT INTO USERS(ID, NAME, PASSWORD, AGE, EMAIL, PHONE, DOB, SEX, STATUS )" +
-                " VALUES (nextval('users_seq'), ?, ?, ?, ?, ?, CURRENT_DATE, ?, 'AC')";
+                " VALUES (nextval('users_seq'), ?, ?, ?, ?, ?, ?, ?, 'AC')";
         try {
             KeyHolder holder = new GeneratedKeyHolder();
             jdbcTemplate.update(new PreparedStatementCreator() {
@@ -82,7 +82,8 @@ public class UserDaoImpl implements IUserDao
                     ps.setInt(3, user.getAge());
                     ps.setString(4, user.getEmail());
                     ps.setString(5, user.getPhoneNumber());
-                    ps.setString(6, user.getSex());
+                    ps.setDate(6, new java.sql.Date(user.getBirthDate().getTime()));
+                    ps.setString(7, user.getSex());
                     return ps;
                 }
             }, holder);
@@ -126,6 +127,31 @@ public class UserDaoImpl implements IUserDao
         }
         catch(Exception ex) {
         }
+    }
+
+    @Override
+    public void updateUser(int userId, User user) {
+        String sql = "UPDATE users SET NAME =?, AGE =?, EMAIL =?, PHONE =?, DOB =?, SEX =?, STATUS =?" +
+                " WHERE id=?";
+        try{
+            jdbcTemplate.update(sql,
+                    user.getName(),
+                    user.getAge(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    new java.sql.Date(user.getBirthDate().getTime()),
+                    user.getSex(),
+                    "AC",
+                    userId);
+        } catch (Exception ex){
+        }
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        try{
+            jdbcTemplate.update("DELETE FROM users WHERE id=?", userId);
+        }catch (Exception ex){ }
     }
 }
 
