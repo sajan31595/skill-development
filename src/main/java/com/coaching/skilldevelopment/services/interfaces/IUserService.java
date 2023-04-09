@@ -27,4 +27,6 @@ public interface IUserService {
     List<Role.RoleType> getRoles(int userId);
 
     void addUserToRoles(int roleId, List<Integer> userIds) throws InvalidRequestException;
+
+    List<Role> getRoles();
 }

@@ -11,7 +11,7 @@ public class TodoRowMapper implements RowMapper<Todo> {
     public Todo mapRow(ResultSet rs, int rowNum) throws SQLException {
         Todo todo = new Todo();
         todo.setTodoId(rs.getInt("id"));
-        todo.setName(rs.getString("name"));
+        todo.setTodoName(rs.getString("name"));
         todo.setDescription(rs.getString("description"));
         todo.setCreatedOn(rs.getDate("created_on"));
         todo.setModifiedOn(rs.getDate("modified_on"));

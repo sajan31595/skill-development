@@ -1,6 +1,7 @@
 package com.coaching.skilldevelopment.services.interfaces;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.CourseUser;
 import com.coaching.skilldevelopment.dto.Event;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface ICourseService {
     List<Course> getCoursesForInstructor(String userId);
 
     void addUsersToCourse(int courseId, List<Integer> userIds);
+
+    List<CourseUser> getUsers(int courseId);
 
     List<Course> getEnrolledCourses(int userId);
 

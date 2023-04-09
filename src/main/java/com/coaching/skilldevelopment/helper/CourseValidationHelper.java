@@ -14,12 +14,12 @@ public class CourseValidationHelper {
 
     public Course getCourse(CreateCourseRequest request) {
         Course course = new Course();
-        course.setName(request.getName());
+        course.setName(request.getCourseName());
         course.setDescription(request.getDescription());
         course.setAuthor_id(request.getAuthor_id());
         course.setType(request.getType());
         course.setGroup_link(request.getGroup_link());
-        try {course.setStart_date(new SimpleDateFormat("dd-mm-yyyy").parse(request.getStart_date()));}
+        try {course.setStart_date(new SimpleDateFormat("YYYY-mm-dd").parse(request.getStart_date()));}
         catch(ParseException pe){}
         return course;
     }
@@ -30,7 +30,7 @@ public class CourseValidationHelper {
         event.setEventDescription(request.getEventDescription());
         event.setEventType(request.getEventType());
         event.setCourseId(request.getCourseId());
-        try {event.setEventDate(new SimpleDateFormat("dd-mm-yyyy").parse(request.getEventDate()));}
+        try {event.setEventDate(new SimpleDateFormat("YYYY-mm-dd").parse(request.getEventDate()));}
         catch(ParseException pe){}
         return event;
     }

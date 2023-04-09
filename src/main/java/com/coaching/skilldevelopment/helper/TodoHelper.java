@@ -11,7 +11,7 @@ public class TodoHelper {
 
     public Todo getTodo(TodoRequest request, boolean isCreateRequest) {
         Todo todo = new Todo();
-        todo.setName(request.getName());
+        todo.setTodoName(request.getTodoName());
         todo.setDescription(request.getDescription());
         todo.setModifiedOn(new Date());
         if(isCreateRequest) todo.setCreatedOn(new Date());

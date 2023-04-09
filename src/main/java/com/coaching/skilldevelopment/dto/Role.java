@@ -1,6 +1,8 @@
 package com.coaching.skilldevelopment.dto;
 
 
+import java.util.List;
+
 public class Role {
     public enum RoleType {
         ADMIN,
@@ -9,7 +11,8 @@ public class Role {
     }
 
     private int roleId;
-    private RoleType roletype;
+    private RoleType roleType;
+    private List<User> members;
 
     public int getRoleId() {
         return roleId;
@@ -19,11 +22,19 @@ public class Role {
         this.roleId = roleId;
     }
 
-    public RoleType getRoletype() {
-        return roletype;
+    public RoleType getRoleType() {
+        return roleType;
     }
 
     public void setRoletype(RoleType roletype) {
-        this.roletype = roletype;
+        this.roleType = roletype;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 }

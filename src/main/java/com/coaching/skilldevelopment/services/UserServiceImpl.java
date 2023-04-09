@@ -110,6 +110,15 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         return updatedRoles;
     }
 
+    public List<Role> getRoles() {
+        List<Role> roles = roleDao.getRoles();
+        for (Role role: roles) {
+            List<User> users = roleDao.getUsers(role.getRoleId());
+            role.setMembers(users);
+        }
+        return roles;
+    }
+
     @Override
     public void addUserToRoles(int roleId, List<Integer> userIds) throws InvalidRequestException {
         //validate if the roleIds are valid.

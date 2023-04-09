@@ -1,6 +1,7 @@
 package com.coaching.skilldevelopment.services;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.CourseUser;
 import com.coaching.skilldevelopment.dto.Event;
 import com.coaching.skilldevelopment.repository.interfaces.ICourseDao;
 import com.coaching.skilldevelopment.services.interfaces.ICourseService;
@@ -54,6 +55,11 @@ public class CourseServiceImpl implements ICourseService {
             // TODO
             //send notification.
         }
+    }
+
+    @Override
+    public List<CourseUser> getUsers(int courseId){
+        return courseDao.getUsers(courseId);
     }
 
     @Override

@@ -10,6 +10,7 @@ public class Event {
     private String eventDescription;
     private Date eventDate;
     private int courseId;
+    private String courseName;
 
     public int getCourseId() {
         return courseId;
@@ -57,5 +58,13 @@ public class Event {
 
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 }

@@ -2,6 +2,7 @@ package com.coaching.skilldevelopment.controllers;
 
 import com.coaching.skilldevelopment.access.AccessChecker;
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.CourseUser;
 import com.coaching.skilldevelopment.dto.Event;
 import com.coaching.skilldevelopment.exception.InvalidRequestException;
 import com.coaching.skilldevelopment.helper.CourseValidationHelper;
@@ -79,6 +80,14 @@ public class CourseController {
         access.canAccessCourses(request.getCourseId());
         courseService.addUsersToCourse(request.getCourseId(), request.getUserIds());
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/getUsers/{courseId}")
+    public ResponseEntity<?> getUsers(@PathVariable int courseId)
+            throws AuthenticationException, InvalidRequestException {
+        access.canAccessCourses(0);
+        List<CourseUser> users = courseService.getUsers(courseId);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/courseEvents")

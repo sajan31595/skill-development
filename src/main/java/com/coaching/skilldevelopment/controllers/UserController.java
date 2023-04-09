@@ -1,6 +1,7 @@
 package com.coaching.skilldevelopment.controllers;
 
 import com.coaching.skilldevelopment.access.AccessChecker;
+import com.coaching.skilldevelopment.dto.Role;
 import com.coaching.skilldevelopment.dto.User;
 import com.coaching.skilldevelopment.exception.InvalidRequestException;
 import com.coaching.skilldevelopment.helper.UserValidationHelper;
@@ -82,5 +83,12 @@ public class UserController {
         access.canAccessUsers();
         userService.addUserToRoles(userRoleRequest.getRoleId(), userRoleRequest.getUserIds());
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<?> getRoles() throws AuthenticationException {
+        access.canAccessUsers();
+        List<Role> roles = userService.getRoles();
+        return ResponseEntity.ok(roles);
     }
 }

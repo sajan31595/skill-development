@@ -1,6 +1,7 @@
 package com.coaching.skilldevelopment.repository.interfaces;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.CourseUser;
 import com.coaching.skilldevelopment.dto.Event;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public interface ICourseDao {
     boolean isUserEnrolled(int userId, int courseId);
 
     void addUserToCourse(int courseId, int userId);
+
+    List<CourseUser> getUsers(int courseId);
 
     List<Course> getEnrolledCourses(int userId);
 

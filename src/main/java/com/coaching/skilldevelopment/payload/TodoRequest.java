@@ -2,7 +2,7 @@ package com.coaching.skilldevelopment.payload;
 
 public class TodoRequest {
     private int todoId;
-    private String name;
+    private String todoName;
     private String description;
     private String status;
 
@@ -14,12 +14,12 @@ public class TodoRequest {
         this.todoId = todoId;
     }
 
-    public String getName() {
-        return name;
+    public String getTodoName() {
+        return todoName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTodoName(String todoName) {
+        this.todoName = todoName;
     }
 
     public String getDescription() {

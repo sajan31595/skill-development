@@ -54,7 +54,7 @@ public class TodoDao implements ITodoDao {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, todo.getName());
+                    ps.setString(1, todo.getTodoName());
                     ps.setString(2, todo.getDescription());
                     ps.setDate(3, new java.sql.Date(todo.getCreatedOn().getTime()));
                     ps.setDate(4, new java.sql.Date(todo.getModifiedOn().getTime()));
@@ -73,7 +73,7 @@ public class TodoDao implements ITodoDao {
         String sql = "UPDATE todos SET name=?, description=?, modified_on=CURRENT_DATE, status=? WHERE id=?";
         try{
             jdbcTemplate.update(sql,
-                    todo.getName(),
+                    todo.getTodoName(),
                     todo.getDescription(),
                     todo.getStatus(),
                     todoId);

@@ -17,6 +17,7 @@ public class UserRowMapper implements RowMapper<User> {
         user.setPhoneNumber(rs.getString("phone"));
         user.setAge(rs.getInt("age"));
         user.setSex(User.SEX.valueOf(rs.getString("sex")));
+        user.setBirthDate(rs.getDate("dob"));
         return user;
     }
 }

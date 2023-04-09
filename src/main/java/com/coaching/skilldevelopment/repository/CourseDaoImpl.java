@@ -1,8 +1,10 @@
 package com.coaching.skilldevelopment.repository;
 
 import com.coaching.skilldevelopment.dto.Course;
+import com.coaching.skilldevelopment.dto.CourseUser;
 import com.coaching.skilldevelopment.dto.Event;
 import com.coaching.skilldevelopment.dto.rowmapper.CourseRowMapper;
+import com.coaching.skilldevelopment.dto.rowmapper.CourseUserRowMapper;
 import com.coaching.skilldevelopment.dto.rowmapper.EventRowMapper;
 import com.coaching.skilldevelopment.repository.interfaces.ICourseDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +150,27 @@ public class CourseDaoImpl implements ICourseDao {
         }
     }
 
+    public List<CourseUser> getUsers(int courseId) {
+        String sql = "with enrolled_users as( " +
+                "select c.id, c.name, u.id as user_id, u.name as user_name, 'Y' enrolled from ENROLMENTS e \n" +
+                "inner join courses c on e.course_id = c.id \n" +
+                "left outer join users u on e.user_id = u.id \n" +
+                "where c.id=? \n" +
+                "union \n" +
+                "select c.id, c.name, u.id as user_id, u.name as user_name, 'N' enrolled \n" +
+                "from courses c,\n" +
+                "users u \n" +
+                "where not exists (select 1 from enrolments where course_id=? and u.id=user_id) \n" +
+                "and c.id=? \n" +
+                ")select * from enrolled_users order by enrolled desc";
+        List<CourseUser> courseUsers = null;
+        try{
+            courseUsers = jdbcTemplate.query(sql, new Object[]{courseId, courseId, courseId},
+                    new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}, new CourseUserRowMapper());
+        }catch(Exception ex) {}
+        return courseUsers;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<Course> getEnrolledCourses(int userId) {
@@ -202,7 +225,9 @@ public class CourseDaoImpl implements ICourseDao {
     @Transactional(readOnly = true)
     public List<Event> getEvents(){
         List<Event> events = null;
-        String sql = "select * from course_events where status='AC'";
+        String sql = "select ce.*, c.name from course_events ce \n" +
+                "inner join courses c on ce.course_id = c.id \n" +
+                "where ce.status='AC' ";
         try {
             events = jdbcTemplate.query(sql, new EventRowMapper());
         }
@@ -216,7 +241,9 @@ public class CourseDaoImpl implements ICourseDao {
     @Transactional(readOnly = true)
     public Event getEvent(int eventId){
         Event event = null;
-        String sql = "select * from course_events where status='AC'";
+        String sql = "select ce.*, c.name from course_events ce \n" +
+                "inner join courses c on ce.course_id = c.id \n" +
+                "where ce.status='AC' and ce.id=" + eventId;
         try {
             event = jdbcTemplate.queryForObject(sql, new EventRowMapper());
         }

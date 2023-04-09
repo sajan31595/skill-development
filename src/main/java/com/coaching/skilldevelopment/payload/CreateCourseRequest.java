@@ -3,7 +3,7 @@ package com.coaching.skilldevelopment.payload;
 public class CreateCourseRequest {
 
     private int id;
-    private String name;
+    private String courseName;
     private String description;
     private String type;
     private int author_id;
@@ -22,12 +22,12 @@ public class CreateCourseRequest {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getDescription() {

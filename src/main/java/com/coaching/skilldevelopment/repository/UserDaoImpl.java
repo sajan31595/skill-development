@@ -1,6 +1,8 @@
 package com.coaching.skilldevelopment.repository;
 
+import com.coaching.skilldevelopment.dto.Role;
 import com.coaching.skilldevelopment.dto.User;
+import com.coaching.skilldevelopment.dto.rowmapper.RoleRowMapper;
 import com.coaching.skilldevelopment.dto.rowmapper.UserRowMapper;
 import com.coaching.skilldevelopment.repository.interfaces.IUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
