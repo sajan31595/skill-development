@@ -12,7 +12,8 @@ public class CourseRowMapper implements RowMapper<Course> {
     public Course mapRow(ResultSet rs, int rowNum) throws SQLException {
         Course course = new Course();
         course.setId(rs.getInt("id"));
-        course.setName(rs.getString("name"));
+        course.setCourseName(rs.getString("name"));
+        course.setDescription(rs.getString("description"));
         course.setType(rs.getString("type"));
         course.setAuthor_id(rs.getInt("author_id"));
         course.setGroup_link(rs.getString("group_link"));

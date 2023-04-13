@@ -42,7 +42,7 @@ public class CourseDaoImpl implements ICourseDao {
                     @Override
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                        ps.setString(1, course.getName());
+                        ps.setString(1, course.getCourseName());
                         ps.setString(2, course.getDescription());
                         ps.setString(3, course.getType());
                         ps.setInt(4, course.getAuthor_id());
@@ -77,7 +77,7 @@ public class CourseDaoImpl implements ICourseDao {
                 "WHERE id=?";
         try{
             jdbcTemplate.update(sql,
-                    course.getName(),
+                    course.getCourseName(),
                     course.getDescription(),
                     course.getType(),
                     course.getAuthor_id(),

@@ -39,8 +39,8 @@ public class UserValidationHelper {
         user.setEmail(request.getEmail());
         user.setAge(request.getAge());
         user.setSex(User.SEX.valueOf(request.getSex()));
-        user.setPhoneNumber(request.getPhone());
-        try {user.setBirthDate(new SimpleDateFormat("yyyy-mm-dd").parse(request.getBirthDate()));}
+        user.setPhoneNumber(request.getPhoneNumber());
+        try {user.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthDate()));}
         catch(ParseException pe){}
         return user;
     }
