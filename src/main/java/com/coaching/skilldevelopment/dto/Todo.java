@@ -10,6 +10,7 @@ public class Todo {
     private String status;
     private Date createdOn;
     private Date modifiedOn;
+    private int userId;
 
     public int getTodoId() {
         return todoId;
@@ -63,5 +64,13 @@ public class Todo {
 
     public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = modifiedOn;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

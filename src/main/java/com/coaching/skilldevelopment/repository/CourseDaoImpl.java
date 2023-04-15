@@ -175,7 +175,7 @@ public class CourseDaoImpl implements ICourseDao {
     @Transactional(readOnly = true)
     public List<Course> getEnrolledCourses(int userId) {
         String sql = "select c.* from enrolments e " +
-                "left join courses c on c.id = e.course_id and user_id = "+ userId;
+                "inner join courses c on c.id = e.course_id and user_id = "+ userId;
         List<Course> courses = null;
         try{
             courses = jdbcTemplate.query(sql,new CourseRowMapper());
@@ -187,7 +187,9 @@ public class CourseDaoImpl implements ICourseDao {
     @Transactional(readOnly = true)
     public List<Event> getEvents(int courseId) {
         List<Event> events = null;
-        String sql = "select * from course_events where course_id=" +courseId;
+        String sql = "select ce.*, c.name from course_events ce \n" +
+                "inner join courses c on ce.course_id = c.id \n" +
+                "where ce.status='AC' AND ce.course_id=" +courseId;
         try {
             events = jdbcTemplate.query(sql, new EventRowMapper());
         }

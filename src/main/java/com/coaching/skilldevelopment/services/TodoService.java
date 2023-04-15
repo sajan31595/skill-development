@@ -15,8 +15,8 @@ public class TodoService implements ITodoService {
     @Autowired
     private ITodoDao todoDao;
 
-    public List<Todo> getTodos(){
-        return todoDao.getTodos();
+    public List<Todo> getTodos(int userId){
+        return todoDao.getTodos(userId);
     }
 
     @Override

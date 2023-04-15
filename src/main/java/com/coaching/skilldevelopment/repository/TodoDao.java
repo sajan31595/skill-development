@@ -22,11 +22,11 @@ public class TodoDao implements ITodoDao {
 
     @Override
     @Transactional(readOnly=true)
-    public List<Todo> getTodos() {
+    public List<Todo> getTodos(int userId) {
+        String sql = "select * from todos where user_id=" + userId;
         List<Todo> todos = null;
         try{
-            todos = jdbcTemplate.query("select * from todos",
-                    new TodoRowMapper());
+            todos = jdbcTemplate.query(sql, new TodoRowMapper());
         }catch (Exception ignored){}
         return todos;
     }
@@ -46,8 +46,8 @@ public class TodoDao implements ITodoDao {
     @Override
     @Transactional
     public void createTodo(Todo todo) {
-        final String sql = "INSERT INTO todos(ID, NAME, DESCRIPTION, CREATED_ON, MODIFIED_ON, STATUS )" +
-                " VALUES (nextval('todos_seq'), ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO todos(ID, NAME, DESCRIPTION, CREATED_ON, MODIFIED_ON, STATUS, USER_ID )" +
+                " VALUES (nextval('todos_seq'), ?, ?, ?, ?, ?, ?)";
         try {
             KeyHolder holder = new GeneratedKeyHolder();
             jdbcTemplate.update(new PreparedStatementCreator() {
@@ -59,6 +59,7 @@ public class TodoDao implements ITodoDao {
                     ps.setDate(3, new java.sql.Date(todo.getCreatedOn().getTime()));
                     ps.setDate(4, new java.sql.Date(todo.getModifiedOn().getTime()));
                     ps.setString(5, todo.getStatus());
+                    ps.setInt(6, todo.getUserId());
                     return ps;
                 }
             }, holder);

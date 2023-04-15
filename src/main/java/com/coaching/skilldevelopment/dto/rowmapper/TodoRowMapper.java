@@ -16,6 +16,7 @@ public class TodoRowMapper implements RowMapper<Todo> {
         todo.setCreatedOn(rs.getDate("created_on"));
         todo.setModifiedOn(rs.getDate("modified_on"));
         todo.setStatus(rs.getString("status"));
+        todo.setUserId(rs.getInt("user_id"));
         return todo;
     }
 }

@@ -50,4 +50,10 @@ public class AccessChecker {
         }
         throw new AuthenticationException();
     }
+
+    public User getCurrentUser() {
+        BasicAuthenticationToken auth =
+                (BasicAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
+        return auth != null ? auth.getUser():null;
+    }
 }

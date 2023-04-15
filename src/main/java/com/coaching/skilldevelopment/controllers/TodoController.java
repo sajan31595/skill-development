@@ -1,5 +1,6 @@
 package com.coaching.skilldevelopment.controllers;
 
+import com.coaching.skilldevelopment.access.AccessChecker;
 import com.coaching.skilldevelopment.dto.Todo;
 import com.coaching.skilldevelopment.exception.InvalidRequestException;
 import com.coaching.skilldevelopment.helper.TodoHelper;
@@ -22,16 +23,20 @@ public class TodoController {
 
     @Autowired
     private TodoHelper helper;
+    @Autowired
+    private AccessChecker access;
 
     @GetMapping("/")
     public ResponseEntity<?> getTodos() {
-        List<Todo> todos = todoService.getTodos();
+        int userId = Integer.parseInt(access.getCurrentUser().getId());
+        List<Todo> todos = todoService.getTodos(userId);
         return ResponseEntity.ok(todos);
     }
 
     @PostMapping("/")
     public ResponseEntity<?> createTodo(@RequestBody TodoRequest request) {
         Todo todo = helper.getTodo(request, true);
+        todo.setUserId(Integer.parseInt(access.getCurrentUser().getId()));
         todoService.createTodo(todo);
         return ResponseEntity.ok("Todo Created");
     }
@@ -45,6 +50,7 @@ public class TodoController {
     @PutMapping("/{todoId}")
     public ResponseEntity<?> updateTodo(@PathVariable int todoId, @RequestBody TodoRequest request) throws InvalidRequestException {
         Todo todo = helper.getTodo(request, false);
+        todo.setUserId(Integer.parseInt(access.getCurrentUser().getId()));
         todoService.updateTodo(todoId, todo);
         todo = todoService.getTodo(todoId);
         return ResponseEntity.ok(todo);
